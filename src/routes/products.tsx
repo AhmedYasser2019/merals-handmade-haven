@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { Star } from "lucide-react";
 import bagsImg from "../assets/bags-collection.jpg";
 import handkerchiefsImg from "../assets/handkerchiefs-collection.jpg";
 import cosmeticsImg from "../assets/cosmetics-teaser.jpg";
@@ -28,7 +29,20 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
 });
 
-const products = [
+type Product = {
+  id: string;
+  image: string;
+  title: string;
+  category: string;
+  description: string;
+  price?: number;
+  compareAt?: number;
+  rating?: number;
+  reviews?: number;
+  badge?: string;
+};
+
+const products: Product[] = [
   {
     id: "embroidered-clutch",
     image: bagsImg,
@@ -36,6 +50,10 @@ const products = [
     category: "Bags",
     description:
       "A hand-embroidered clutch in soft blush tones with delicate floral details. Perfect for weddings and elegant evenings.",
+    price: 48,
+    compareAt: 60,
+    rating: 4.8,
+    reviews: 36,
   },
   {
     id: "linen-pouch",
@@ -44,6 +62,9 @@ const products = [
     category: "Bags",
     description:
       "A compact linen pouch with hand-stitched florals. Made to carry your everyday essentials beautifully.",
+    price: 29,
+    rating: 4.6,
+    reviews: 21,
   },
   {
     id: "monogram-handkerchief",
@@ -52,6 +73,10 @@ const products = [
     category: "Wedding Handkerchiefs",
     description:
       "A soft linen handkerchief embroidered with an initial and surrounded by delicate flowers. A keepsake for weddings and anniversaries.",
+    price: 22,
+    compareAt: 28,
+    rating: 5,
+    reviews: 54,
   },
   {
     id: "bridal-handkerchief",
@@ -60,6 +85,9 @@ const products = [
     category: "Wedding Handkerchiefs",
     description:
       "Hand-embroidered wedding handkerchief with lace trim and a floral wreath. Designed for the bride and her loved ones.",
+    price: 34,
+    rating: 4.9,
+    reviews: 42,
   },
   {
     id: "custom-order",
@@ -68,6 +96,9 @@ const products = [
     category: "Bespoke",
     description:
       "Work with us to create a custom piece — a special motif, a name, a date, or a colour that holds meaning for you.",
+    price: 55,
+    rating: 4.9,
+    reviews: 18,
   },
   {
     id: "cosmetics-soon",
@@ -79,6 +110,45 @@ const products = [
     badge: "Soon",
   },
 ];
+
+const reviews = [
+  {
+    id: "r1",
+    name: "Amira H.",
+    rating: 5,
+    product: "Bridal Floral Handkerchief",
+    text: "The embroidery is even more beautiful in person. My mother cried when I gave her hers on the wedding day.",
+  },
+  {
+    id: "r2",
+    name: "Laura M.",
+    rating: 5,
+    product: "Embroidered Floral Clutch",
+    text: "Exquisite craftsmanship and the colours are so soft. It gets a compliment every time I carry it.",
+  },
+  {
+    id: "r3",
+    name: "Nour S.",
+    rating: 4,
+    product: "Personalised Monogram Handkerchief",
+    text: "Lovely quality linen and the monogram was stitched exactly as I asked. Shipping was quick too.",
+  },
+];
+
+function Stars({ rating, className = "" }: { rating: number; className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-0.5 ${className}`} aria-label={`${rating} out of 5 stars`}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Star
+          key={i}
+          className={`size-3.5 ${
+            i <= Math.round(rating) ? "fill-primary text-primary" : "text-muted-foreground/40"
+          }`}
+        />
+      ))}
+    </span>
+  );
+}
 
 function ProductsPage() {
   return (
