@@ -187,6 +187,11 @@ function ProductsPage() {
                     {product.badge}
                   </span>
                 )}
+                {product.compareAt && product.price && (
+                  <span className="absolute right-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+                    -{Math.round(((product.compareAt - product.price) / product.compareAt) * 100)}%
+                  </span>
+                )}
               </div>
               <div className="p-6">
                 <span className="text-xs font-medium uppercase tracking-wider text-primary">
@@ -195,13 +200,66 @@ function ProductsPage() {
                 <h3 className="mt-2 font-heading text-xl font-semibold text-foreground">
                   {product.title}
                 </h3>
+                {product.rating && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <Stars rating={product.rating} />
+                    <span className="text-xs text-muted-foreground">
+                      {product.rating.toFixed(1)} ({product.reviews} reviews)
+                    </span>
+                  </div>
+                )}
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {product.description}
                 </p>
+                {product.price ? (
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="font-heading text-xl font-semibold text-foreground">
+                      ${product.price}
+                    </span>
+                    {product.compareAt && (
+                      <span className="text-sm text-muted-foreground line-through">
+                        ${product.compareAt}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm font-medium text-primary">Pricing announced at launch</p>
+                )}
               </div>
             </div>
           ))}
         </div>
+
+        {/* Customer feedback */}
+        <section className="mt-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-heading text-3xl font-semibold text-foreground sm:text-4xl">
+              What our customers say
+            </h2>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <Stars rating={5} />
+              <span className="text-sm text-muted-foreground">4.9 average from 171 reviews</span>
+            </div>
+          </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review) => (
+              <figure
+                key={review.id}
+                className="rounded-2xl border border-border/60 bg-card p-6 subtle-shadow"
+              >
+                <Stars rating={review.rating} />
+                <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  “{review.text}”
+                </blockquote>
+                <figcaption className="mt-4 text-sm">
+                  <span className="font-medium text-foreground">{review.name}</span>
+                  <span className="block text-xs text-muted-foreground">{review.product}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
 
         <div className="mt-16 text-center">
           <p className="text-muted-foreground">
