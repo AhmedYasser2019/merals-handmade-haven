@@ -101,6 +101,21 @@
     font-weight: 500;
     letter-spacing: -0.02em;
   }
+
+  [dir="rtl"] body {
+    font-family: "Tajawal", sans-serif;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6,
+  [dir="rtl"] .font-heading {
+    font-family: "Amiri", serif;
+    letter-spacing: 0;
+  }
 }
 
 @utility text-balance {
