@@ -6,6 +6,7 @@ import bagsImg from "../assets/bags-collection.jpg";
 import handkerchiefsImg from "../assets/handkerchiefs-collection.jpg";
 import cosmeticsImg from "../assets/cosmetics-teaser.jpg";
 import { Heart, Sparkles, Truck } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,6 +31,8 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const { t } = useI18n();
+
   return (
     <SiteLayout>
       {/* Hero */}
@@ -37,21 +40,22 @@ function HomePage() {
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-24">
           <div className="order-2 lg:order-1">
             <span className="inline-block rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground">
-              Handmade with Heart
+              {t.home.badge}
             </span>
             <h1 className="mt-6 font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl lg:text-6xl">
-              Carry beauty,<br />stitch love
+              {t.home.title1}
+              <br />
+              {t.home.title2}
             </h1>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-              Meral creates elegant handmade bags and embroidered wedding handkerchiefs — small
-              luxuries made slowly and meant to be kept forever.
+              {t.home.intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button asChild size="lg" className="rounded-full px-8">
-                <Link to="/products">Shop Collection</Link>
+                <Link to="/products">{t.home.shop}</Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-                <Link to="/about">Our Story</Link>
+                <Link to="/about">{t.home.story}</Link>
               </Button>
             </div>
           </div>
@@ -60,7 +64,7 @@ function HomePage() {
             <div className="relative overflow-hidden rounded-3xl card-shadow">
               <img
                 src={heroImg}
-                alt="Handmade embroidered bags and wedding handkerchiefs arranged on blush silk with lavender flowers"
+                alt={t.home.heroAlt}
                 width={1280}
                 height={768}
                 className="aspect-[4/3] w-full object-cover"
@@ -76,12 +80,12 @@ function HomePage() {
         <div className="mb-12 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <h2 className="font-heading text-3xl font-semibold text-foreground sm:text-4xl">
-              Featured Collections
+              {t.home.featured}
             </h2>
-            <p className="mt-2 text-muted-foreground">Curated pieces from our current collection</p>
+            <p className="mt-2 text-muted-foreground">{t.home.featuredSub}</p>
           </div>
           <Button asChild variant="outline" className="rounded-full">
-            <Link to="/products">View All Products</Link>
+            <Link to="/products">{t.home.viewAll}</Link>
           </Button>
         </div>
 
@@ -89,21 +93,21 @@ function HomePage() {
           <ProductCard
             to="/products"
             image={bagsImg}
-            title="Handmade Bags"
-            description="Clutches and pouches embroidered with delicate florals, perfect for everyday elegance or special occasions."
+            title={t.home.bagsTitle}
+            description={t.home.bagsDesc}
           />
           <ProductCard
             to="/products"
             image={handkerchiefsImg}
-            title="Wedding Handkerchiefs"
-            description="Personalised embroidered handkerchiefs for brides, grooms, and loved ones — a timeless keepsake."
+            title={t.home.hankTitle}
+            description={t.home.hankDesc}
           />
           <ProductCard
             to="/cosmetics"
             image={cosmeticsImg}
-            title="Cosmetics — Coming Soon"
-            description="A natural skincare line inspired by the same softness and care we bring to every stitch."
-            badge="Soon"
+            title={t.home.cosmeticsTitle}
+            description={t.home.cosmeticsDesc}
+            badge={t.home.soon}
           />
         </div>
       </section>
@@ -114,18 +118,18 @@ function HomePage() {
           <div className="grid gap-8 sm:grid-cols-3">
             <ValueCard
               icon={<Heart className="size-6 text-primary" />}
-              title="Made with Love"
-              description="Every piece is crafted by hand, one stitch at a time, with attention to the smallest detail."
+              title={t.home.value1Title}
+              description={t.home.value1Desc}
             />
             <ValueCard
               icon={<Sparkles className="size-6 text-primary" />}
-              title="Personalised Touch"
-              description="From monograms to custom embroidery, we make each piece feel uniquely yours."
+              title={t.home.value2Title}
+              description={t.home.value2Desc}
             />
             <ValueCard
               icon={<Truck className="size-6 text-primary" />}
-              title="Shipped Worldwide"
-              description="Carefully packaged and delivered to your door, wherever you are."
+              title={t.home.value3Title}
+              description={t.home.value3Desc}
             />
           </div>
         </div>
@@ -135,15 +139,12 @@ function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
         <div className="gradient-blush-lavender rounded-3xl p-8 sm:p-12 lg:p-16">
           <h2 className="font-heading text-3xl font-semibold text-foreground sm:text-4xl">
-            Have a special request?
+            {t.home.ctaTitle}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            We love creating custom orders for weddings, gifts, and everyday treasures. Tell us
-            your idea and we'll bring it to life.
-          </p>
+          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{t.home.ctaDesc}</p>
           <div className="mt-8">
             <Button asChild size="lg" variant="outline" className="rounded-full border-foreground/20 px-8">
-              <Link to="/contact">Get in Touch</Link>
+              <Link to="/contact">{t.home.ctaButton}</Link>
             </Button>
           </div>
         </div>

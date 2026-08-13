@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Instagram } from "lucide-react";
 import heroImg from "../assets/hero-meral.jpg";
+import { useI18n } from "@/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -30,20 +31,19 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { t } = useI18n();
+
   return (
     <SiteLayout>
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground">
-            Get in Touch
+            {t.contact.badge}
           </span>
           <h1 className="mt-6 font-heading text-4xl font-semibold text-foreground sm:text-5xl">
-            Let's create something beautiful
+            {t.contact.title}
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Whether you have a custom order, a wholesale question, or just want to say hello, we
-            would love to hear from you.
-          </p>
+          <p className="mt-4 text-lg text-muted-foreground">{t.contact.subtitle}</p>
         </div>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-2">
@@ -53,8 +53,12 @@ function ContactPage() {
                 <Mail className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="font-heading text-lg font-semibold text-foreground">Email</h3>
-                <p className="text-muted-foreground">hello@meral.handmade</p>
+                <h3 className="font-heading text-lg font-semibold text-foreground">
+                  {t.contact.email}
+                </h3>
+                <p className="text-muted-foreground" dir="ltr">
+                  hello@meral.handmade
+                </p>
               </div>
             </div>
 
@@ -63,12 +67,15 @@ function ContactPage() {
                 <Instagram className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="font-heading text-lg font-semibold text-foreground">Instagram</h3>
+                <h3 className="font-heading text-lg font-semibold text-foreground">
+                  {t.contact.instagram}
+                </h3>
                 <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground transition-colors hover:text-primary"
+                  dir="ltr"
                 >
                   @meral.handmade
                 </a>
@@ -76,11 +83,10 @@ function ContactPage() {
             </div>
 
             <div className="rounded-2xl border border-border/60 bg-card p-6">
-              <h3 className="font-heading text-lg font-semibold text-foreground">Custom orders</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                We specialise in personalised wedding handkerchiefs and custom embroidery. Share
-                your ideas and we'll help you design the perfect piece.
-              </p>
+              <h3 className="font-heading text-lg font-semibold text-foreground">
+                {t.contact.customTitle}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t.contact.customDesc}</p>
             </div>
           </div>
 
@@ -88,25 +94,25 @@ function ContactPage() {
             className="space-y-5 rounded-2xl border border-border/60 bg-card p-6 sm:p-8"
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Thank you for your message! We'll get back to you soon.");
+              alert(t.contact.thanks);
             }}
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{t.contact.name}</Label>
                 <Input
                   id="name"
-                  placeholder="Your name"
+                  placeholder={t.contact.namePlaceholder}
                   className="rounded-xl border-border/60 bg-background"
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t.contact.email}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t.contact.emailPlaceholder}
                   className="rounded-xl border-border/60 bg-background"
                   required
                 />
@@ -114,20 +120,20 @@ function ContactPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject">Subject</Label>
+              <Label htmlFor="subject">{t.contact.subject}</Label>
               <Input
                 id="subject"
-                placeholder="Custom order / Wholesale / General inquiry"
+                placeholder={t.contact.subjectPlaceholder}
                 className="rounded-xl border-border/60 bg-background"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
+              <Label htmlFor="message">{t.contact.message}</Label>
               <Textarea
                 id="message"
-                placeholder="Tell us about your idea..."
+                placeholder={t.contact.messagePlaceholder}
                 rows={5}
                 className="rounded-xl border-border/60 bg-background"
                 required
@@ -135,7 +141,7 @@ function ContactPage() {
             </div>
 
             <Button type="submit" className="w-full rounded-full">
-              Send Message
+              {t.contact.send}
             </Button>
           </form>
         </div>
