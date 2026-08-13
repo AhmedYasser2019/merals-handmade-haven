@@ -1,5 +1,4 @@
 export const en = {
-  dir: "ltr" as const,
   langName: "العربية",
   brand: "Meral",
   nav: {
@@ -172,7 +171,6 @@ export const en = {
 export type Dictionary = typeof en;
 
 export const ar: Dictionary = {
-  dir: "rtl" as unknown as "ltr",
   langName: "English",
   brand: "ميرال",
   nav: {
