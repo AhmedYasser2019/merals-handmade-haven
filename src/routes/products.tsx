@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { Star, ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 import bagsImg from "../assets/bags-collection.jpg";
-import handkerchiefsImg from "../assets/handkerchiefs-collection.jpg";
-import cosmeticsImg from "../assets/cosmetics-teaser.jpg";
+import { products, reviewIds } from "@/data/products";
+import { useI18n } from "@/i18n";
+import { useCart } from "@/cart/CartContext";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -29,115 +30,12 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
 });
 
-type Product = {
-  id: string;
-  image: string;
-  title: string;
-  category: string;
-  description: string;
-  price?: number;
-  compareAt?: number;
-  rating?: number;
-  reviews?: number;
-  badge?: string;
-};
-
-const products: Product[] = [
-  {
-    id: "embroidered-clutch",
-    image: bagsImg,
-    title: "Embroidered Floral Clutch",
-    category: "Bags",
-    description:
-      "A hand-embroidered clutch in soft blush tones with delicate floral details. Perfect for weddings and elegant evenings.",
-    price: 48,
-    compareAt: 60,
-    rating: 4.8,
-    reviews: 36,
-  },
-  {
-    id: "linen-pouch",
-    image: bagsImg,
-    title: "Linen Embroidery Pouch",
-    category: "Bags",
-    description:
-      "A compact linen pouch with hand-stitched florals. Made to carry your everyday essentials beautifully.",
-    price: 29,
-    rating: 4.6,
-    reviews: 21,
-  },
-  {
-    id: "monogram-handkerchief",
-    image: handkerchiefsImg,
-    title: "Personalised Monogram Handkerchief",
-    category: "Wedding Handkerchiefs",
-    description:
-      "A soft linen handkerchief embroidered with an initial and surrounded by delicate flowers. A keepsake for weddings and anniversaries.",
-    price: 22,
-    compareAt: 28,
-    rating: 5,
-    reviews: 54,
-  },
-  {
-    id: "bridal-handkerchief",
-    image: handkerchiefsImg,
-    title: "Bridal Floral Handkerchief",
-    category: "Wedding Handkerchiefs",
-    description:
-      "Hand-embroidered wedding handkerchief with lace trim and a floral wreath. Designed for the bride and her loved ones.",
-    price: 34,
-    rating: 4.9,
-    reviews: 42,
-  },
-  {
-    id: "custom-order",
-    image: bagsImg,
-    title: "Custom Embroidery Order",
-    category: "Bespoke",
-    description:
-      "Work with us to create a custom piece — a special motif, a name, a date, or a colour that holds meaning for you.",
-    price: 55,
-    rating: 4.9,
-    reviews: 18,
-  },
-  {
-    id: "cosmetics-soon",
-    image: cosmeticsImg,
-    title: "Natural Cosmetics — Coming Soon",
-    category: "Cosmetics",
-    description:
-      "Our upcoming line of gentle, handcrafted skincare and beauty products made with natural ingredients.",
-    badge: "Soon",
-  },
-];
-
-const reviews = [
-  {
-    id: "r1",
-    name: "Amira H.",
-    rating: 5,
-    product: "Bridal Floral Handkerchief",
-    text: "The embroidery is even more beautiful in person. My mother cried when I gave her hers on the wedding day.",
-  },
-  {
-    id: "r2",
-    name: "Laura M.",
-    rating: 5,
-    product: "Embroidered Floral Clutch",
-    text: "Exquisite craftsmanship and the colours are so soft. It gets a compliment every time I carry it.",
-  },
-  {
-    id: "r3",
-    name: "Nour S.",
-    rating: 4,
-    product: "Personalised Monogram Handkerchief",
-    text: "Lovely quality linen and the monogram was stitched exactly as I asked. Shipping was quick too.",
-  },
-];
-
-function Stars({ rating, className = "" }: { rating: number; className?: string }) {
+export function Stars({ rating, className = "" }: { rating: number; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-0.5 ${className}`} aria-label={`${rating} out of 5 stars`}>
+    <span
+      className={`inline-flex items-center gap-0.5 ${className}`}
+      aria-label={`${rating} / 5`}
+    >
       {[1, 2, 3, 4, 5].map((i) => (
         <Star
           key={i}
@@ -151,122 +49,153 @@ function Stars({ rating, className = "" }: { rating: number; className?: string 
 }
 
 function ProductsPage() {
+  const { t, lang } = useI18n();
+  const { add } = useCart();
+  const nf = new Intl.NumberFormat(lang === "ar" ? "ar-EG" : "en-EG");
+
   return (
     <SiteLayout>
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full bg-secondary/60 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground">
-            Our Collection
+            {t.products.badge}
           </span>
           <h1 className="mt-6 font-heading text-4xl font-semibold text-foreground sm:text-5xl">
-            Handmade for every moment
+            {t.products.title}
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Elegant bags and embroidered keepsakes, crafted by hand and designed to be loved for
-            years.
-          </p>
+          <p className="mt-4 text-lg text-muted-foreground">{t.products.subtitle}</p>
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="group overflow-hidden rounded-2xl border border-border/60 bg-card subtle-shadow transition-all hover:card-shadow"
-            >
-              <div className="relative aspect-square overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  width={1024}
-                  height={1024}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {product.badge && (
-                  <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                    {product.badge}
-                  </span>
-                )}
-                {product.compareAt && product.price && (
-                  <span className="absolute right-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-                    -{Math.round(((product.compareAt - product.price) / product.compareAt) * 100)}%
-                  </span>
-                )}
-              </div>
-              <div className="p-6">
-                <span className="text-xs font-medium uppercase tracking-wider text-primary">
-                  {product.category}
-                </span>
-                <h3 className="mt-2 font-heading text-xl font-semibold text-foreground">
-                  {product.title}
-                </h3>
-                {product.rating && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <Stars rating={product.rating} />
-                    <span className="text-xs text-muted-foreground">
-                      {product.rating.toFixed(1)} ({product.reviews} reviews)
+          {products.map((product) => {
+            const copy = t.products.items[product.id];
+            const discount =
+              product.compareAt && product.price
+                ? Math.round(((product.compareAt - product.price) / product.compareAt) * 100)
+                : null;
+
+            return (
+              <div
+                key={product.id}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card subtle-shadow transition-all hover:card-shadow"
+              >
+                <div className="relative aspect-square overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={copy.title}
+                    width={1024}
+                    height={1024}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  {product.comingSoon && (
+                    <span className="absolute start-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                      {t.products.soon}
                     </span>
-                  </div>
-                )}
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {product.description}
-                </p>
-                {product.price ? (
-                  <div className="mt-4 flex items-baseline gap-2">
-                    <span className="font-heading text-xl font-semibold text-foreground">
-                      ${product.price}
+                  )}
+                  {discount && (
+                    <span className="absolute end-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+                      -{nf.format(discount)}%
                     </span>
-                    {product.compareAt && (
-                      <span className="text-sm text-muted-foreground line-through">
-                        ${product.compareAt}
+                  )}
+                </div>
+
+                <div className="flex flex-1 flex-col p-6">
+                  <span className="text-xs font-medium uppercase tracking-wider text-primary">
+                    {t.products.categories[product.category]}
+                  </span>
+                  <h3 className="mt-2 font-heading text-xl font-semibold text-foreground">
+                    {copy.title}
+                  </h3>
+                  {product.rating && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <Stars rating={product.rating} />
+                      <span className="text-xs text-muted-foreground">
+                        {nf.format(product.rating)} ({nf.format(product.reviews ?? 0)}{" "}
+                        {t.products.reviews})
                       </span>
-                    )}
-                  </div>
-                ) : (
-                  <p className="mt-4 text-sm font-medium text-primary">Pricing announced at launch</p>
-                )}
+                    </div>
+                  )}
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {copy.description}
+                  </p>
+
+                  {product.price ? (
+                    <>
+                      <div className="mt-4 flex items-baseline gap-2">
+                        <span className="font-heading text-xl font-semibold text-foreground">
+                          {nf.format(product.price)} {t.currency}
+                        </span>
+                        {product.compareAt && (
+                          <span className="text-sm text-muted-foreground line-through">
+                            {nf.format(product.compareAt)} {t.currency}
+                          </span>
+                        )}
+                      </div>
+                      <Button
+                        className="mt-4 w-full rounded-full"
+                        onClick={() => {
+                          add({
+                            id: product.id,
+                            title: copy.title,
+                            price: product.price!,
+                            image: product.image,
+                          });
+                          toast.success(t.cart.added);
+                        }}
+                      >
+                        <ShoppingBag className="size-4" />
+                        {t.cart.add}
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="mt-4 text-sm font-medium text-primary">
+                      {t.products.launchPrice}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Customer feedback */}
         <section className="mt-24">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold text-foreground sm:text-4xl">
-              What our customers say
+              {t.products.feedbackTitle}
             </h2>
             <div className="mt-3 flex items-center justify-center gap-2">
               <Stars rating={5} />
-              <span className="text-sm text-muted-foreground">4.9 average from 171 reviews</span>
+              <span className="text-sm text-muted-foreground">{t.products.feedbackAvg}</span>
             </div>
           </div>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
-              <figure
-                key={review.id}
-                className="rounded-2xl border border-border/60 bg-card p-6 subtle-shadow"
-              >
-                <Stars rating={review.rating} />
-                <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  “{review.text}”
-                </blockquote>
-                <figcaption className="mt-4 text-sm">
-                  <span className="font-medium text-foreground">{review.name}</span>
-                  <span className="block text-xs text-muted-foreground">{review.product}</span>
-                </figcaption>
-              </figure>
-            ))}
+            {reviewIds.map((id) => {
+              const review = t.products.reviewsList[id];
+              return (
+                <figure
+                  key={id}
+                  className="rounded-2xl border border-border/60 bg-card p-6 subtle-shadow"
+                >
+                  <Stars rating={5} />
+                  <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                    “{review.text}”
+                  </blockquote>
+                  <figcaption className="mt-4 text-sm">
+                    <span className="font-medium text-foreground">{review.name}</span>
+                    <span className="block text-xs text-muted-foreground">{review.product}</span>
+                  </figcaption>
+                </figure>
+              );
+            })}
           </div>
         </section>
 
-
         <div className="mt-16 text-center">
-          <p className="text-muted-foreground">
-            Interested in a custom piece? We'd love to hear your idea.
-          </p>
+          <p className="text-muted-foreground">{t.products.customNote}</p>
           <Button asChild className="mt-4 rounded-full">
-            <Link to="/contact">Request a Custom Order</Link>
+            <Link to="/contact">{t.products.customCta}</Link>
           </Button>
         </div>
       </div>
