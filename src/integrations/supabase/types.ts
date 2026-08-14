@@ -14,7 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reservation_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          quantity: number
+          reservation_id: string
+          title: string
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          quantity?: number
+          reservation_id: string
+          title: string
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          quantity?: number
+          reservation_id?: string
+          title?: string
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservation_items_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservations: {
+        Row: {
+          address: string | null
+          created_at: string
+          full_name: string
+          id: string
+          note: string | null
+          phone: string
+          status: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          note?: string | null
+          phone: string
+          status?: string
+          total?: number
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          note?: string | null
+          phone?: string
+          status?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
