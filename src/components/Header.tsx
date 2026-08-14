@@ -77,6 +77,7 @@ export function Header() {
           ) : (
             <Link
               to="/auth"
+              search={{ redirect: undefined }}
               aria-label={t.auth.signIn}
               className="inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:text-primary"
             >
