@@ -1,12 +1,16 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Globe, Menu, X } from "lucide-react";
+import { Globe, LogOut, Menu, ShoppingBag, User, X } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "@/i18n";
+import { useCart } from "@/cart/CartContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { t, lang, toggleLang } = useI18n();
+  const { count } = useCart();
+  const { user, signOut } = useAuth();
 
   const navLinks = [
     { to: "/", label: t.nav.home },
@@ -18,7 +22,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <span className="font-heading text-2xl font-semibold tracking-tight text-foreground">
             {t.brand}
@@ -39,7 +43,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={toggleLang}
             aria-label={t.nav.switchLang}
@@ -48,6 +52,37 @@ export function Header() {
             <Globe className="size-3.5" />
             {lang === "en" ? "العربية" : "English"}
           </button>
+
+          <Link
+            to="/cart"
+            aria-label={t.cart.view}
+            className="relative inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:text-primary"
+          >
+            <ShoppingBag className="size-5" />
+            {count > 0 && (
+              <span className="absolute -top-0.5 end-0 inline-flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                {count}
+              </span>
+            )}
+          </Link>
+
+          {user ? (
+            <button
+              onClick={() => signOut()}
+              aria-label={t.auth.signOut}
+              className="inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:text-primary"
+            >
+              <LogOut className="size-5" />
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              aria-label={t.auth.signIn}
+              className="inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:text-primary"
+            >
+              <User className="size-5" />
+            </Link>
+          )}
 
           <button
             className="inline-flex items-center justify-center rounded-md p-2 text-foreground md:hidden"
