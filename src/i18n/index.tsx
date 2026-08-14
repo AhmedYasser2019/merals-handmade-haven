@@ -18,7 +18,7 @@ const I18nContext = createContext<I18nValue | null>(null);
 const STORAGE_KEY = "meral-lang";
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>("ar");
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
