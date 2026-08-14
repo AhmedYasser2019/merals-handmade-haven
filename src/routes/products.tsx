@@ -68,7 +68,7 @@ function ProductsPage() {
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => {
-            const copy = t.products.items[product.id];
+            const copy = t.products.items[product.id]!;
             const discount =
               product.compareAt && product.price
                 ? Math.round(((product.compareAt - product.price) / product.compareAt) * 100)
@@ -172,7 +172,7 @@ function ProductsPage() {
           </div>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {reviewIds.map((id) => {
-              const review = t.products.reviewsList[id];
+              const review = t.products.reviewsList[id]!;
               return (
                 <figure
                   key={id}
