@@ -48,6 +48,9 @@ class ReservationController extends Controller
                 'address' => $data['address'] ?? null,
                 'note' => $data['note'] ?? null,
                 'total' => 0,
+                // Set explicitly rather than leaning on the column default, so the
+                // freshly created model returned to the client carries it too.
+                'status' => 'pending',
             ]);
 
             $total = 0.0;

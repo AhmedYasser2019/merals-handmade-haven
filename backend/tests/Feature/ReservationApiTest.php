@@ -53,6 +53,8 @@ class ReservationApiTest extends TestCase
         $response->assertCreated();
         // json_encode drops the trailing .0, so compare numerically rather than by type.
         $this->assertSame(750.0, (float) $response->json('data.total'));
+        // The created model must carry the status, not leave it to the column default.
+        $response->assertJsonPath('data.status', 'pending');
         $this->assertDatabaseHas('reservations', ['total' => 750, 'status' => 'pending']);
         $this->assertDatabaseHas('reservation_items', ['unit_price' => 250, 'quantity' => 3]);
     }

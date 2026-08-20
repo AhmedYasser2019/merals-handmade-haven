@@ -8,6 +8,10 @@ Auth uses Sanctum personal access tokens. Send them as
 Every response is JSON. Validation failures return `422` with
 `{"message": ..., "errors": {"field": ["..."]}}`.
 
+Rate limits: register/login share one bucket of 10 per minute per IP, and the
+two public forms share another. They are separate on purpose — form spam must
+not be able to lock a visitor out of signing in.
+
 ## Catalogue
 
 ### `GET /products`
@@ -108,9 +112,9 @@ The signed-in customer's own reservations, newest first, items included.
 ### `POST /contact` → `201`
 
 `{ "name", "email", "subject": optional, "message" }` — lands in the dashboard
-inbox with an unread badge. Rate limited to 10/minute per IP.
+inbox with an unread badge.
 
 ### `POST /subscribers` → `201`
 
 `{ "email", "name": optional }` — the cosmetics launch waitlist. Signing up
-twice is not an error. Rate limited to 10/minute per IP.
+twice is not an error.
